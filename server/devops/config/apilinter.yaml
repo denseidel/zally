@@ -1,0 +1,36 @@
+##################################################################################################
+# apilinter service (based on Reviews service)
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: apilinter
+  labels:
+    app: apilinter
+spec:
+  ports:
+  - port: 9080
+    targetPort: 8080
+    name: http
+  selector:
+    app: apilinter
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: apilinter
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: apilinter
+        version: v1
+    spec:
+      containers:
+      - name: apilinter
+        image: dennisseidel/apilinter:v2
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+---

@@ -1,10 +1,4 @@
-FROM registry.opensource.zalan.do/stups/openjdk:latest
-
-MAINTAINER "http://zalando.github.io/"
-
-COPY src/main/resources/api/zally-api.yaml /zalando-apis/zally-api.yaml
-COPY build/libs/zally.jar /
-
+FROM openjdk:8-jdk-alpine
 EXPOSE 8080
-
-CMD java $(java-dynamic-memory-opts) $(appdynamics-agent) -jar /zally.jar
+COPY . /
+CMD java -Dspring.profiles.active=dev -jar build/libs/zally.jar 

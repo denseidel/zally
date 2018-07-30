@@ -1,0 +1,16 @@
+FROM gradle:jdk8-alpine as builder
+
+MAINTAINER "den.seidel@gmail.com"
+
+COPY --chown=gradle:gradle . /home/gradle/src
+COPY src/main/resources/api/zally-api.yaml /zalando-apis/zally-api.yaml
+COPY src/main/resources/api/zally-api.yaml /home/gradle/src/zalando-apis/zally-api.yaml
+WORKDIR /home/gradle/src
+RUN gradle build
+
+FROM openjdk:8-jdk-alpine
+EXPOSE 9080
+COPY src/main/resources/api/zally-api.yaml /zalando-apis/zally-api.yaml
+COPY src/main/resources/api/zally-api.yaml /home/gradle/src/zalando-apis/zally-api.yaml
+COPY --from=builder /home/gradle/src/build/libs/zally.jar /
+CMD java -Dspring.profiles.active=dev -jar /zally.jar
