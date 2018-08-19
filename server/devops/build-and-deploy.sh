@@ -1,6 +1,10 @@
 #!/bin/bash
 set -ex
 
+# move to script folder
+cd $(dirname $0)
+echo $(pwd)
+
 # SET THE FOLLOWING VARIABLES
 # docker hub username 
 USERNAME=dennisseidel
